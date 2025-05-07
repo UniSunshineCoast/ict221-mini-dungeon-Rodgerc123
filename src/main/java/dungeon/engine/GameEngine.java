@@ -6,18 +6,22 @@ public class GameEngine {
 
     /**
      * An example board to store the current game state.
-     *
-     * Note: depending on your game, you might want to change this from 'int' to String or something?
      */
     private Cell[][] map;
+    private int size;
+    private Player player;
+
 
     /**
      * Creates a square game board.
      *
      * @param size the width and height.
      */
+
     public GameEngine(int size) {
+        this.size = size; // Store the size
         map = new Cell[size][size];
+        this.player = new Player(0, 0); // Initialize the player
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -31,6 +35,7 @@ public class GameEngine {
         map[0][0].setStyle("-fx-background-color: #7baaa4");
         map[size-1][size-1].setStyle("-fx-background-color: #7baaa4");
     }
+
 
     /**
      * The size of the current game.
