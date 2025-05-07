@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+<<<<<<< HEAD
+=======
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+>>>>>>> e97c34b (Initial commit)
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+<<<<<<< HEAD
         <option name="gradleHome" value="" />
+=======
+        <option name="gradleJvm" value="openjdk-23" />
+>>>>>>> e97c34b (Initial commit)
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
