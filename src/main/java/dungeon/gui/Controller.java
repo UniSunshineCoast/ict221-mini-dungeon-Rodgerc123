@@ -25,8 +25,8 @@ public class Controller {
         //Loop through map board and add each cell into grid pane
         for(int i = 0; i < engine.getSize(); i++) {
             for (int j = 0; j < engine.getSize(); j++) {
-                Cell cell = engine.getMap()[i][j];
-                gridPane.add(cell, j, i);
+                // Cell cell = engine.getMap()[i][j];
+                // gridPane.add(cell, j, i);
             }
         }
         gridPane.setGridLinesVisible(true);

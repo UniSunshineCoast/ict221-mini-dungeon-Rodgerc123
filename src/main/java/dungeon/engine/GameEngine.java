@@ -7,7 +7,7 @@ import javafx.scene.text.Text;
  */
 public class GameEngine {
 
-    private Cell[][] map;
+    private GameCell[][] map;
     private int size;
     private Player player;
 
@@ -18,20 +18,17 @@ public class GameEngine {
      */
     public GameEngine(int size) {
         this.size = size;
-        map = new Cell[size][size];
+        map = new GameCell[size][size];
         this.player = new Player(0, 0); // Starting in top-left corner
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                Cell cell = new Cell();
-                Text text = new Text(i + "," + j);
-                cell.getChildren().add(text);
+                GameCell cell = new EmptyCell(i, j); // no visual Text needed
                 map[i][j] = cell;
             }
         }
 
-        map[0][0].setStyle("-fx-background-color: #7baaa4");
-        map[size - 1][size - 1].setStyle("-fx-background-color: #7baaa4");
+        // Removed JavaFX styling lines — not used in logic-only engine
     }
 
     /**
@@ -44,9 +41,14 @@ public class GameEngine {
     /**
      * Returns the map array.
      */
-    public Cell[][] getMap() {
+    public GameCell[][] getMap() {
         return map;
     }
+
+    public Player getPlayer() {
+        return player;
+    }
+
 
     /**
      * Moves the player if possible in the specified direction.
@@ -87,10 +89,18 @@ public class GameEngine {
         GameEngine engine = new GameEngine(10);
         System.out.printf("The size of map is %d * %d\n", engine.getSize(), engine.getSize());
 
-        engine.movePlayer("right");
-        engine.movePlayer("down");
-        engine.movePlayer("up");
-        engine.movePlayer("left");
-        engine.movePlayer("invalid"); // invalid direction test
+        // Place a GoldCell at position (0,1)
+        engine.getMap()[0][1] = new GoldCell(0, 1);
+
+        // Move the player to the right (into GoldCell)
+        boolean moved = engine.movePlayer("right");
+
+        if (moved) {
+            // Cast the cell and show what happens
+            GameCell cell = (GameCell) engine.getMap()[0][1];
+            String result = cell.onEnter(engine.getPlayer());
+            System.out.println(result);
+            System.out.println("Player score is now: " + engine.getPlayer().getScore());
+        }
     }
 }
