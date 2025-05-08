@@ -57,28 +57,48 @@ public class GameEngine {
      * @return true if the move was valid and completed
      */
     public boolean movePlayer(String direction) {
-        int row = player.getRow();
-        int col = player.getCol();
-        int newRow = row;
-        int newCol = col;
+        int x = player.getRow();
+        int y = player.getCol();
+
+        int newX = x;
+        int newY = y;
 
         switch (direction.toLowerCase()) {
-            case "up": newRow--; break;
-            case "down": newRow++; break;
-            case "left": newCol--; break;
-            case "right": newCol++; break;
+            case "up": newX--; break;
+            case "down": newX++; break;
+            case "left": newY--; break;
+            case "right": newY++; break;
             default:
                 System.out.println("Invalid direction: " + direction);
                 return false;
         }
 
-        if (newRow < 0 || newCol < 0 || newRow >= size || newCol >= size) {
-            System.out.println("You can't move outside the map!");
+        // Bounds check
+        if (newX < 0 || newX >= size || newY < 0 || newY >= size) {
+            System.out.println("You can't move outside the map.");
             return false;
         }
 
-        player.moveTo(newRow, newCol);
-        System.out.println("Moved " + direction + " to (" + newRow + "," + newCol + ")");
+        // Move the player
+        player.moveTo(newX, newY);
+        System.out.println("Moved " + direction + " to (" + newX + "," + newY + ")");
+
+        // After moving: check for ranged mutant attacks
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                GameCell cell = map[i][j];
+                if (cell instanceof RangedMutantCell) {
+                    int dist = Math.abs(i - newX) + Math.abs(j - newY);
+                    if ((i == newX || j == newY) && dist <= 2 && dist > 0) {
+                        String result = ((RangedMutantCell) cell).tryAttack(player);
+                        if (result != null) {
+                            System.out.println(result);
+                        }
+                    }
+                }
+            }
+        }
+
         return true;
     }
 
@@ -133,6 +153,15 @@ public class GameEngine {
             System.out.println(cell.onEnter(engine.getPlayer()));
             System.out.println("HP after mutant: " + engine.getPlayer().getHealth());
             System.out.println("Score after mutant: " + engine.getPlayer().getScore());
+        }
+        // Place a RangedMutantCell at (2,4) – 2 rows below the player
+        engine.getMap()[2][4] = new RangedMutantCell(2, 4);
+
+        // Move down to (1,4) – triggers proximity (still within 2 vertical tiles)
+        boolean moved5 = engine.movePlayer("down");
+        if (moved5) {
+            GameCell cell = engine.getMap()[1][4];
+            System.out.println("Standing at: " + engine.getPlayer().getRow() + "," + engine.getPlayer().getCol());
         }
 
     }
