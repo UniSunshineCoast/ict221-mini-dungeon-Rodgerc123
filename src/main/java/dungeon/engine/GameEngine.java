@@ -89,18 +89,54 @@ public class GameEngine {
         GameEngine engine = new GameEngine(10);
         System.out.printf("The size of map is %d * %d\n", engine.getSize(), engine.getSize());
 
-        // Place a GoldCell at position (0,1)
+        // Place a GoldCell at (0,1)
         engine.getMap()[0][1] = new GoldCell(0, 1);
 
-        // Move the player to the right (into GoldCell)
-        boolean moved = engine.movePlayer("right");
+        // Place a TrapCell at (0,2)
+        engine.getMap()[0][2] = new TrapCell(0, 2);
 
-        if (moved) {
-            // Cast the cell and show what happens
-            GameCell cell = (GameCell) engine.getMap()[0][1];
-            String result = cell.onEnter(engine.getPlayer());
-            System.out.println(result);
-            System.out.println("Player score is now: " + engine.getPlayer().getScore());
+        // Move to GoldCell
+        boolean moved1 = engine.movePlayer("right");
+        if (moved1) {
+            GameCell cell = engine.getMap()[0][1];
+            System.out.println(cell.onEnter(engine.getPlayer()));
+            System.out.println("Score after gold: " + engine.getPlayer().getScore());
         }
+
+        // Move to TrapCell
+        boolean moved2 = engine.movePlayer("right");
+        if (moved2) {
+            GameCell cell = engine.getMap()[0][2];
+            System.out.println(cell.onEnter(engine.getPlayer()));
+            System.out.println("HP after trap: " + engine.getPlayer().getHealth());
+        }
+        // Set HP to 6 manually to test healing
+        engine.getPlayer().loseHP(2); // drops HP to 6
+
+        // Place PotionCell at (0,3)
+        engine.getMap()[0][3] = new PotionCell(0, 3);
+
+        // Move to PotionCell
+        boolean moved3 = engine.movePlayer("right");
+        if (moved3) {
+            GameCell cell = engine.getMap()[0][3];
+            System.out.println(cell.onEnter(engine.getPlayer()));
+            System.out.println("HP after potion: " + engine.getPlayer().getHealth());
+        }
+        // Place MeleeMutantCell at (0,4)
+        engine.getMap()[0][4] = new MeleeMutantCell(0, 4);
+
+        // Move to MeleeMutantCell
+        boolean moved4 = engine.movePlayer("right");
+        if (moved4) {
+            GameCell cell = engine.getMap()[0][4];
+            System.out.println(cell.onEnter(engine.getPlayer()));
+            System.out.println("HP after mutant: " + engine.getPlayer().getHealth());
+            System.out.println("Score after mutant: " + engine.getPlayer().getScore());
+        }
+
     }
+
+
+
 }
