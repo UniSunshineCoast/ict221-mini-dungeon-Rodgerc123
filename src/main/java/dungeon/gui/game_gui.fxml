@@ -1,18 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dungeon.gui.Controller">
+<!-- IMPORTANT: This BorderPane must remain the single root node of the FXML -->
+<BorderPane prefHeight="800.0" prefWidth="800.0"
+            xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="dungeon.gui.Controller">
+
+    <!-- Padding around the entire GUI -->
     <padding>
         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
     </padding>
 
+    <!-- Center panel: the game grid area -->
     <center>
-        <GridPane fx:id="gridPane" prefHeight="400.0" prefWidth="400.0" BorderPane.alignment="CENTER">
-
+        <GridPane fx:id="gridPane"
+                  prefHeight="400.0" prefWidth="400.0"
+                  BorderPane.alignment="CENTER">
         </GridPane>
     </center>
 
+    <!-- Bottom panel: movement control buttons -->
+    <bottom>
+        <HBox spacing="10" alignment="center" BorderPane.alignment="CENTER">
+            <!-- Move up -->
+            <Button fx:id="btnUp" text="Up" onAction="#handleUp"/>
+            <!-- Move down -->
+            <Button fx:id="btnDown" text="Down" onAction="#handleDown"/>
+            <!-- Move left -->
+            <Button fx:id="btnLeft" text="Left" onAction="#handleLeft"/>
+            <!-- Move right -->
+            <Button fx:id="btnRight" text="Right" onAction="#handleRight"/>
+        </HBox>
+    </bottom>
 
 </BorderPane>
