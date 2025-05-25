@@ -107,7 +107,7 @@ public class GameEngine {
      */
     public static void main(String[] args) {
         GameEngine engine = new GameEngine(10);
-        System.out.printf("The size of map is %d * %d\n", engine.getSize(), engine.getSize());
+        System.out.printf("MiniDungeon Engine v1.2 — Map size is %d × %d\n", engine.getSize(), engine.getSize());
 
         // Place a GoldCell at (0,1)
         engine.getMap()[0][1] = new GoldCell(0, 1);
