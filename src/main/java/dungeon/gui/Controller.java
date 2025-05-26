@@ -5,6 +5,7 @@ import dungeon.engine.GameEngine;
 import dungeon.gui.GameCellView;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.event.ActionEvent;
 
@@ -22,6 +23,9 @@ public class Controller {
     @FXML private Button btnDown;
     @FXML private Button btnLeft;
     @FXML private Button btnRight;
+    @FXML private Label lblHP;
+    @FXML private Label lblScore;
+    @FXML private Label lblSteps;
 
     // Game engine instance handling logic
     GameEngine engine;
@@ -34,6 +38,9 @@ public class Controller {
     public void initialize() {
         engine = new GameEngine(10); // Create a 10x10 dungeon
         updateGui();                 // Draw the initial grid
+        lblHP.setText("HP: " + engine.getPlayer().getHealth());
+        lblScore.setText("Score: " + engine.getPlayer().getScore());
+        lblSteps.setText("Steps Left: " + engine.getPlayer().getStepsLeft());
     }
 
     // Handle UP button click
@@ -90,6 +97,11 @@ public class Controller {
             }
         }
 
-        gridPane.setGridLinesVisible(true); // Show grid lines (helpful for debugging layout)
+        gridPane.setGridLinesVisible(true); // Show grid lines
+
+        // ✅ Update HUD labels
+        lblHP.setText("HP: " + engine.getPlayer().getHealth());
+        lblScore.setText("Score: " + engine.getPlayer().getScore());
+        lblSteps.setText("Steps Left: " + engine.getPlayer().getStepsLeft());
     }
 }

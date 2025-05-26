@@ -15,6 +15,15 @@
         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
     </padding>
 
+    <!-- Top panel: the Score area -->
+    <top>
+        <HBox spacing="20" alignment="center" BorderPane.alignment="CENTER">
+            <Label fx:id="lblHP" text="HP: 10"/>
+            <Label fx:id="lblScore" text="Score: 0"/>
+            <Label fx:id="lblSteps" text="Steps Left: 100"/>
+        </HBox>
+    </top>
+
     <!-- Center panel: the game grid area -->
     <center>
         <GridPane fx:id="gridPane"
