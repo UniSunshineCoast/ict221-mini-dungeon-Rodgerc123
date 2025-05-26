@@ -1,10 +1,14 @@
 package dungeon.engine;
 
+import java.io.Serializable;
+
 /**
  * Abstract class representing a special cell in the dungeon.
  * Subclasses define specific interactions (e.g., gold, trap, mutant).
  */
-public abstract class GameCell {
+public abstract class GameCell implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     protected int row;
     protected int col;
 

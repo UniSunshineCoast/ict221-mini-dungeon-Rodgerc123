@@ -1,10 +1,13 @@
 package dungeon.engine;
 
+
 /**
  * A cell that restores the player's health when entered.
  * Disappears after being used.
  */
 public class PotionCell extends GameCell {
+    private static final long serialVersionUID = 1L;
+
     private boolean used = false;
 
     public PotionCell(int row, int col) {

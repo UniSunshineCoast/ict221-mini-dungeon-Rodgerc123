@@ -1,11 +1,15 @@
 package dungeon.engine;
 
+import java.io.Serializable;
+
 /**
  * A stationary melee mutant.
  * Stepping on it costs 2 HP but gives 2 score.
  * The mutant is defeated and removed after encounter.
  */
-public class MeleeMutantCell extends GameCell {
+public class MeleeMutantCell extends GameCell implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private boolean defeated = false;
 
     public MeleeMutantCell(int row, int col) {

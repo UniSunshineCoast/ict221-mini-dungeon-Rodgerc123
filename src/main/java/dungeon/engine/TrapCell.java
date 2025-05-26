@@ -1,10 +1,12 @@
 package dungeon.engine;
 
+
 /**
  * A trap cell that harms the player when entered.
  * The trap remains active after triggering.
  */
 public class TrapCell extends GameCell {
+    private static final long serialVersionUID = 1L;
 
     public TrapCell(int row, int col) {
         super(row, col);

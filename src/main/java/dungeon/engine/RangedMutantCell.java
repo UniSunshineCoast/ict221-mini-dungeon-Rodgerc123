@@ -2,10 +2,13 @@ package dungeon.engine;
 
 import java.util.Random;
 
+
 /**
  * A ranged mutant that can attack from a distance.
  */
 public class RangedMutantCell extends GameCell {
+    private static final long serialVersionUID = 1L;
+
     private boolean defeated = false;
     private static final Random random = new Random();
 

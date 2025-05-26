@@ -8,7 +8,7 @@ public class EmptyCell extends GameCell {
 
     @Override
     public char getSymbol() {
-        return '.';
+        return ' ';  // ← instructs GameCellView to show background only
     }
 
     @Override

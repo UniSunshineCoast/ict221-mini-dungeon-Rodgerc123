@@ -28,6 +28,7 @@
     <center>
         <GridPane fx:id="gridPane"
                   prefHeight="400.0" prefWidth="400.0"
+                  style="-fx-border-color: saddlebrown; -fx-border-width: 8; -fx-border-insets: 5;"
                   BorderPane.alignment="CENTER">
         </GridPane>
     </center>
@@ -43,6 +44,10 @@
             <Button fx:id="btnLeft" text="Left" onAction="#handleLeft"/>
             <!-- Move right -->
             <Button fx:id="btnRight" text="Right" onAction="#handleRight"/>
+            <!-- Save button -->
+            <Button fx:id="btnSave" text="Save" onAction="#handleSave"/>
+            <!-- Load button -->
+            <Button fx:id="btnLoad" text="Load" onAction="#handleLoad"/>
         </HBox>
     </bottom>
 

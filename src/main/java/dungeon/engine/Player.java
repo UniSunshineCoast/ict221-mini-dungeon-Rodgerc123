@@ -1,10 +1,15 @@
 package dungeon.engine;
 
+import java.io.Serializable;
+
+
 /**
  * Represents the player in the MiniDungeon game.
  * Tracks position, health, score, and steps remaining.
  */
-public class Player {
+public class Player implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private int row;
     private int col;
     private int health;
