@@ -40,6 +40,15 @@ public class Player implements Serializable {
         this.stepsLeft--;
     }
 
+    public void resetPosition() {
+        this.row = 0;
+        this.col = 0;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     // Health
     public int getHealth() { return health; }
     public void loseHP(int amount) { health -= amount; }

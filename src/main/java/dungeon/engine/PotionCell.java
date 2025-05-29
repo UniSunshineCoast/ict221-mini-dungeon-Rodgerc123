@@ -5,10 +5,10 @@ package dungeon.engine;
  * A cell that restores the player's health when entered.
  * Disappears after being used.
  */
+
 public class PotionCell extends GameCell {
     private static final long serialVersionUID = 1L;
-
-    private boolean used = false;
+    private boolean consumed = false;
 
     public PotionCell(int row, int col) {
         super(row, col);
@@ -16,16 +16,16 @@ public class PotionCell extends GameCell {
 
     @Override
     public char getSymbol() {
-        return used ? '.' : 'H';
+        return consumed ? '.' : 'H';
     }
 
     @Override
     public String onEnter(Player player) {
-        if (!used) {
-            player.gainHP(4);
-            used = true;
-            return "You drank a health potion and gained 4 HP.";
+        if (!consumed) {
+            player.gainHP(3);  // Regains up to 3 HP
+            consumed = true;
+            return "You found a potion and gained 3 HP!";
         }
-        return "An empty potion bottle lies here.";
+        return "An empty potion vial lies here.";
     }
 }

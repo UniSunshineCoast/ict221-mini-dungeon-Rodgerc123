@@ -6,6 +6,7 @@ import java.io.Serializable;
  * Abstract class representing a special cell in the dungeon.
  * Subclasses define specific interactions (e.g., gold, trap, mutant).
  */
+
 public abstract class GameCell implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -19,6 +20,9 @@ public abstract class GameCell implements Serializable {
 
     public int getRow() { return row; }
     public int getCol() { return col; }
+
+    public void setRow(int row) { this.row = row; }
+    public void setCol(int col) { this.col = col; }
 
     /**
      * Returns the single-character symbol for this cell on the map.

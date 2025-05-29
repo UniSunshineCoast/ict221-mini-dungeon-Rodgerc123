@@ -35,20 +35,40 @@
 
     <!-- Bottom panel: movement control buttons -->
     <bottom>
-        <HBox spacing="10" alignment="center" BorderPane.alignment="CENTER">
-            <!-- Move up -->
-            <Button fx:id="btnUp" text="Up" onAction="#handleUp"/>
-            <!-- Move down -->
-            <Button fx:id="btnDown" text="Down" onAction="#handleDown"/>
-            <!-- Move left -->
-            <Button fx:id="btnLeft" text="Left" onAction="#handleLeft"/>
-            <!-- Move right -->
-            <Button fx:id="btnRight" text="Right" onAction="#handleRight"/>
-            <!-- Save button -->
-            <Button fx:id="btnSave" text="Save" onAction="#handleSave"/>
-            <!-- Load button -->
-            <Button fx:id="btnLoad" text="Load" onAction="#handleLoad"/>
-        </HBox>
+        <VBox spacing="10" alignment="CENTER" BorderPane.alignment="CENTER">
+
+            <!-- Row 1: Movement and Save/Load -->
+            <HBox spacing="10" alignment="CENTER">
+                <Button fx:id="btnUp" text="Up" onAction="#handleUp"/>
+                <Button fx:id="btnDown" text="Down" onAction="#handleDown"/>
+                <Button fx:id="btnLeft" text="Left" onAction="#handleLeft"/>
+                <Button fx:id="btnRight" text="Right" onAction="#handleRight"/>
+                <Button fx:id="btnSave" text="Save" onAction="#handleSave"/>
+                <Button fx:id="btnLoad" text="Load" onAction="#handleLoad"/>
+            </HBox>
+
+            <!-- Row 2: Player name -->
+            <HBox spacing="10" alignment="CENTER">
+                <Label text="Player Name:"/>
+                <TextField fx:id="txtName" promptText="Enter your name"/>
+            </HBox>
+
+            <!-- Row 3: Difficulty + Run Game -->
+            <HBox spacing="10" alignment="CENTER">
+                <Label text="Difficulty:"/>
+                <TextField fx:id="txtDifficulty" promptText="0-10"/>
+                <Button fx:id="btnRunGame" text="Run Game" onAction="#handleRunGame"/>
+            </HBox>
+
+            <!-- Row 4: Level & Player Display -->
+            <HBox spacing="10" alignment="CENTER">
+                <Label text="Level:"/>
+                <Label fx:id="lblLevel"/>
+                <Label text="Player:"/>
+                <Label fx:id="lblPlayerName"/>
+            </HBox>
+
+        </VBox>
     </bottom>
 
 </BorderPane>

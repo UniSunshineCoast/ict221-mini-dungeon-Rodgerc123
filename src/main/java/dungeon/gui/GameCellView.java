@@ -14,17 +14,21 @@ public class GameCellView extends StackPane {
 
     /**
      * Constructs a GUI view for a dungeon cell, with an optional player overlay.
+     * @param cell the GameCell object representing this cell (can be null)
+     * @param hasPlayer true if the player is currently on this cell
      */
     public GameCellView(GameCell cell, boolean hasPlayer) {
-        setPrefSize(64, 64); // Match icon size
+        setPrefSize(64, 64); // Match icon size to grid
 
-        // Base icon for the cell (e.g., gold, trap, wall)
-        String iconFile = getIconForCell(cell);
-        if (iconFile != null) {
-            ImageView cellIcon = new ImageView(loadImage(iconFile));
-            cellIcon.setFitWidth(48);
-            cellIcon.setFitHeight(48);
-            getChildren().add(cellIcon);
+        // Handle null cells gracefully — shows no background if cell is null
+        if (cell != null) {
+            String iconFile = getIconForCell(cell);
+            if (iconFile != null) {
+                ImageView cellIcon = new ImageView(loadImage(iconFile));
+                cellIcon.setFitWidth(48);
+                cellIcon.setFitHeight(48);
+                getChildren().add(cellIcon);
+            }
         }
 
         // If the player is on this cell, overlay the player icon
@@ -38,9 +42,10 @@ public class GameCellView extends StackPane {
 
     /**
      * Maps a GameCell symbol to its corresponding icon filename.
-     * Empty or unknown cells return null (render no icon).
+     * Returns null if the cell is null or unknown (no image shown).
      */
     private String getIconForCell(GameCell cell) {
+        if (cell == null) return null; // 🔒 Prevents crash
         char symbol = cell.getSymbol();
         return switch (symbol) {
             case 'G' -> "gold.png";
@@ -51,12 +56,14 @@ public class GameCellView extends StackPane {
             case 'L' -> "ladder.png";
             case 'E' -> "entry.png";
             case '#' -> "wall.png";
-            default -> null;  // ✅ No icon for EmptyCell
+            default -> null; // No icon for unknown or empty cells
         };
     }
 
     /**
      * Loads an image from the /images/ folder in resources.
+     * @param filename the image file name (e.g., "trap.png")
+     * @return JavaFX Image object
      */
     private Image loadImage(String filename) {
         return new Image(getClass().getResource("/images/" + filename).toExternalForm());
