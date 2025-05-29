@@ -68,6 +68,12 @@
                 <Label fx:id="lblPlayerName"/>
             </HBox>
 
+            <!-- Row 5: Top 5 Scores Display -->
+            <HBox spacing="10" alignment="CENTER">
+                <Label text="Top Scores:"/>
+                <TextArea fx:id="txtTopScores" editable="false" prefRowCount="4" prefColumnCount="20"/>
+            </HBox>
+
         </VBox>
     </bottom>
 

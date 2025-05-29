@@ -19,6 +19,7 @@ public class GameEngine implements Serializable {
 
     private boolean gameWon = false;
     private boolean gameOver = false;
+    // private boolean topScoreAchieved = false;
 
     public GameEngine(int size, int difficulty, String playerName) {
         this.size = size;
@@ -32,69 +33,64 @@ public class GameEngine implements Serializable {
      * Generates the dungeon map for the current level based on difficulty.
      */
     public void generateLevel() {
+
         map = new GameCell[size][size];
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
-                map[row][col] = new EmptyCell(row, col); // Ensures no null cells
+                map[row][col] = new EmptyCell(row, col);
             }
         }
 
         Random rand = new Random();
 
-        // Place entry door at bottom-left
+        // Place entry
         int entryRow = size - 1;
         int entryCol = 0;
-        map[entryRow][entryCol] = new EntryCell(entryRow, entryCol);
+        map[entryRow][entryCol] = new EntryCell(entryRow, entryCol); // <-- Might crash here
 
-        // Place player just to the right of the door
-        int playerRow = entryRow;
-        int playerCol = entryCol + 1;
-        player = new Player(playerRow, playerCol);
+        // Place player to the right
+        player = new Player(entryRow, entryCol, playerName);
 
         int itemCount = difficulty + 2;
 
         // Add gold
-        for (int i = 0; i < itemCount; i++) {
-            placeRandomCell(new GoldCell(0, 0));
-        }
+        for (int i = 0; i < itemCount; i++) placeRandomCell(new GoldCell(rand.nextInt(size), rand.nextInt(size)));
 
         // Add trap
-        for (int i = 0; i < itemCount; i++) {
-            placeRandomCell(new TrapCell(0, 0));
-        }
+        for (int i = 0; i < itemCount; i++) placeRandomCell(new TrapCell(rand.nextInt(size), rand.nextInt(size)));
 
         // Add melee mutant
-        for (int i = 0; i < itemCount / 2; i++) {
-            placeRandomCell(new MeleeMutantCell(0, 0));
-        }
+        for (int i = 0; i < itemCount / 2; i++) placeRandomCell(new MeleeMutantCell(rand.nextInt(size), rand.nextInt(size)));
 
         // Add ranged mutant
-        for (int i = 0; i < itemCount / 2; i++) {
-            placeRandomCell(new RangedMutantCell(0, 0));
-        }
+        for (int i = 0; i < itemCount / 2; i++) placeRandomCell(new RangedMutantCell(rand.nextInt(size), rand.nextInt(size)));
 
-        // Add potions
-        for (int i = 0; i < 2; i++) {
-            placeRandomCell(new PotionCell(0, 0));
-        }
+        // Add potion
+        for (int i = 0; i < 2; i++) placeRandomCell(new PotionCell(rand.nextInt(size), rand.nextInt(size)));
 
-        // Place ladder
-        placeRandomCell(new LadderCell(0, 0));
+        // Add ladder
+        placeRandomCell(new LadderCell(rand.nextInt(size), rand.nextInt(size)));
     }
 
     /**
-     * Helper to place a GameCell on an empty cell only.
+     * Helper to place a GameCell on an empty space only.
      */
     private void placeRandomCell(GameCell cell) {
         Random rand = new Random();
         int row, col;
+        int attempts = 0;
+        final int MAX_ATTEMPTS = 100;
+
         do {
             row = rand.nextInt(size);
             col = rand.nextInt(size);
-        } while (
-                (row == player.getRow() && col == player.getCol()) ||  // avoid player
-                        (map[row][col] != null && !(map[row][col] instanceof EmptyCell)) // avoid non-empty
-        );
+            attempts++;
+            if (attempts > MAX_ATTEMPTS) {
+                System.err.println("⚠ Failed to place " + cell.getClass().getSimpleName() + " after " + MAX_ATTEMPTS + " attempts.");
+                return;
+            }
+        } while ((row == player.getRow() && col == player.getCol()) || !(map[row][col] instanceof EmptyCell));
+
         cell.setRow(row);
         cell.setCol(col);
         map[row][col] = cell;
@@ -118,32 +114,39 @@ public class GameEngine implements Serializable {
 
         if (newRow < 0 || newRow >= size || newCol < 0 || newCol >= size) return false;
 
-        // Move and interact
         player.moveTo(newRow, newCol);
-        GameCell cell = map[newRow][newCol];
 
+        GameCell cell = map[newRow][newCol];
         if (cell != null) {
             String message = cell.onEnter(player);
             System.out.println(message);
 
             if (cell instanceof LadderCell) {
                 if (currentLevel == 1) {
-                    // Go to next level
                     currentLevel = 2;
                     difficulty += 2;
                     generateLevel();
                     System.out.println("You've reached Level 2! Difficulty increased.");
                 } else {
                     gameWon = true;
-                    System.out.println("Congratulations! You completed the dungeon!");
+                    System.out.println("🎉 Congratulations! You completed the dungeon!");
+
+                    // Save score
+                    //player.setScore(player.getScore()); // Final score set already via cell interactions
+                    //topScoreAchieved = ScoreManager.addScore(playerName, player.getScore());
+                    //System.out.println(topScoreAchieved ? "🏆 New Top Score!" : "Thanks for playing!");
+
                 }
             }
         }
 
         if (!player.isAlive() || !player.hasSteps()) {
             gameOver = true;
-            player.setScore(-1);
-            System.out.println("Game Over. You lost.");
+            player.setScore(-1); // fail state
+            System.out.println("💀 Game Over. You lost.");
+
+            // Save fail score too (not top likely)
+            // topScoreAchieved = ScoreManager.addScore(playerName, player.getScore());
         }
 
         return true;
@@ -155,6 +158,13 @@ public class GameEngine implements Serializable {
     public int getSize() { return size; }
     public int getCurrentLevel() { return currentLevel; }
     public boolean isGameWon() { return gameWon; }
-    public boolean isGameOver() { return gameOver; }
     public String getPlayerName() { return playerName; }
+    public int getDifficulty() { return difficulty; }
+    /**
+     * Returns true if the game has ended — player has no health or steps, or reached the final level.
+     */
+    public boolean isGameOver() {
+        return player.getHealth() <= 0 || player.getStepsLeft() <= 0 || gameWon;
+    }
+    // public boolean isTopScoreAchieved() { return topScoreAchieved; }
 }

@@ -5,9 +5,12 @@ import dungeon.engine.GameEngine;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import java.io.*;
@@ -22,6 +25,7 @@ public class Controller {
     @FXML private Button btnSave;
     @FXML private Button btnLoad;
     @FXML private Button btnRunGame;
+    @FXML private TextArea txtTopScores;
     @FXML private TextField txtDifficulty;
     @FXML private TextField txtName;
     @FXML private Label lblHP;
@@ -52,23 +56,42 @@ public class Controller {
      */
     @FXML
     private void handleRunGame(ActionEvent event) {
-        System.out.println("txtName = " + txtName); // Check if null
 
         int difficulty = 3;
         try {
             difficulty = Integer.parseInt(txtDifficulty.getText());
             if (difficulty < 0 || difficulty > 10) difficulty = 3;
+
         } catch (NumberFormatException e) {
-            System.out.println("Invalid difficulty entered. Using default of 3.");
+            System.out.println("❗ Invalid difficulty, using default.");
         }
 
         String playerName = txtName.getText().isEmpty() ? "Unknown" : txtName.getText();
-        engine = new GameEngine(10, difficulty, playerName); // Calls constructor with difficulty and name
-        updateGui();
-        updateStats();
-        lblLevel.setText("1");
-        lblPlayerName.setText(playerName);
+        System.out.println("✔ Player name: " + playerName);
+
+        try {
+            engine = new GameEngine(10, difficulty, playerName); // Can freeze here
+            System.out.println("✔ GameEngine created");
+        } catch (Exception e) {
+            System.err.println("❌ Failed to create GameEngine: " + e.getMessage());
+            e.printStackTrace();
+            return;
+        }
+
+        try {
+            updateGui();
+            updateStats();
+
+            lblLevel.setText(String.valueOf(engine.getCurrentLevel()));
+            lblPlayerName.setText(playerName);
+            updateTopScores();
+        } catch (Exception e) {
+            System.err.println("❌ Error during GUI or stats update: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
+
+
 
     @FXML private void handleUp(ActionEvent event) { processMove("up"); }
     @FXML private void handleDown(ActionEvent event) { processMove("down"); }
@@ -100,6 +123,7 @@ public class Controller {
             updateStats();
             lblLevel.setText(String.valueOf(engine.getCurrentLevel()));
             lblPlayerName.setText("Adventurer");
+            updateTopScores();
             System.out.println("Game loaded. Player at (" +
                     engine.getPlayer().getRow() + ", " +
                     engine.getPlayer().getCol() + ")");
@@ -121,8 +145,33 @@ public class Controller {
                     System.out.println("⚠ Player moved into a null cell!");
                 }
             }
+
             updateGui();
             updateStats();
+
+
+
+            // Ensure Level label updates with current level
+            lblLevel.setText(String.valueOf(engine.getCurrentLevel()));
+            txtDifficulty.setText(String.valueOf(engine.getDifficulty()));
+
+            if (engine.isGameOver()) {
+                boolean topScoreAchieved = dungeon.engine.ScoreManager.addScore(engine.getPlayer().getName(), engine.getPlayer().getScore());
+                Alert alert = new Alert(AlertType.INFORMATION);
+                if (topScoreAchieved) {
+                    alert.setTitle("🎉 New Top Score!");
+                    alert.setHeaderText("Congratulations!");
+                    alert.setContentText("You made the Top 5!\nScore: " + engine.getPlayer().getScore());
+                } else {
+                    alert.setTitle("Game Over");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Thanks for playing!\nScore: " + engine.getPlayer().getScore());
+                }
+                alert.showAndWait();
+
+                updateTopScores();
+            }
+
         } catch (Exception e) {
             System.err.println("Error during movement: " + e.getMessage());
             e.printStackTrace();
@@ -146,6 +195,17 @@ public class Controller {
         lblHP.setText("HP: " + engine.getPlayer().getHealth());
         lblScore.setText("Score: " + engine.getPlayer().getScore());
         lblSteps.setText("Steps Left: " + engine.getPlayer().getStepsLeft());
+    }
+
+    private void updateTopScores() {
+        if (txtTopScores == null) return; // Failsafe
+        StringBuilder sb = new StringBuilder();
+        int rank = 1;
+        for (var entry : dungeon.engine.ScoreManager.getTopScores()) {
+            sb.append(rank).append(". ").append(entry.name).append(" - ").append(entry.score).append("\n");
+            rank++;
+        }
+        txtTopScores.setText(sb.toString());
     }
 
     private void setGridBackground() {

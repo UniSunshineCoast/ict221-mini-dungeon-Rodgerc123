@@ -15,6 +15,7 @@ public class Player implements Serializable {
     private int health;
     private int score;
     private int stepsLeft;
+    private String name;
 
     /**
      * Creates a player starting at a given position.
@@ -22,13 +23,23 @@ public class Player implements Serializable {
      * @param startRow initial row position
      * @param startCol initial column position
      */
-    public Player(int startRow, int startCol) {
+    public Player(int startRow, int startCol, String name) {
+        this.name = name;
         this.row = startRow;
         this.col = startCol;
         this.health = 10;
         this.score = 0;
         this.stepsLeft = 100;
     }
+
+    // Convenience constructor for backward compatibility
+    public Player(int row, int col) {
+        this(row, col, "Anonymous");
+    }
+
+
+    // Name
+    public String getName() { return name; }
 
     // Position
     public int getRow() { return row; }
@@ -63,6 +74,7 @@ public class Player implements Serializable {
 
     // Steps
     public int getStepsLeft() { return stepsLeft; }
+
 
     // Game status checks
     public boolean isAlive() { return health > 0; }

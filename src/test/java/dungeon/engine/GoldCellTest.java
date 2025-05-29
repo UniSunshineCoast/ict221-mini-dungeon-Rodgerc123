@@ -10,7 +10,7 @@ public class GoldCellTest {
 
     @Test
     public void testGoldCellIncreasesScoreAndRemovesGold() {
-        Player player = new Player(0, 0);
+        Player player = new Player(0, 0, "TestPlayer");
         GoldCell goldCell = new GoldCell(0, 1);
 
         // Initial assertions
