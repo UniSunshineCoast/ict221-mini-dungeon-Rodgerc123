@@ -29,6 +29,6 @@ public class MeleeMutantCell extends GameCell implements Serializable {
             defeated = true;
             return "You attacked a melee mutant and won! You gained 2 score but lost 2 HP.";
         }
-        return "The remains of a defeated mutant lie here.";
+        return "You see the remains of a melee mutant.";
     }
 }

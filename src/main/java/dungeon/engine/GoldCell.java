@@ -22,6 +22,7 @@ public class GoldCell extends GameCell {
             collected = true;
             return "You picked up a gold.";
         }
-        return "Nothing here.";
+        return "A faint shimmer remains where gold once was.";
     }
+
 }

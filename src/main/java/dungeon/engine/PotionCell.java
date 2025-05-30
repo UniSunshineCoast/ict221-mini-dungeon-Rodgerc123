@@ -26,6 +26,6 @@ public class PotionCell extends GameCell {
             consumed = true;
             return "You found a potion and gained 3 HP!";
         }
-        return "An empty potion vial lies here.";
+        return "You see the remains of a used potion.";
     }
 }

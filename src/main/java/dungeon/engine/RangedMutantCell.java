@@ -28,7 +28,7 @@ public class RangedMutantCell extends GameCell {
             defeated = true;
             return "You attacked a ranged mutant and won! You gained 2 score.";
         }
-        return "You see the remains of a defeated ranged mutant.";
+        return "You see the remains of a ranged mutant.";
     }
 
     /**

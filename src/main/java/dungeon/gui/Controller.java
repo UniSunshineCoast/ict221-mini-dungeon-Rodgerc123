@@ -20,6 +20,7 @@ public class Controller {
     @FXML private GridPane gridPane;
     @FXML private Button btnUp;
     @FXML private Button btnDown;
+    @FXML private Button btnHelp;
     @FXML private Button btnLeft;
     @FXML private Button btnRight;
     @FXML private Button btnSave;
@@ -32,7 +33,46 @@ public class Controller {
     @FXML private Label lblScore;
     @FXML private Label lblSteps;
     @FXML private Label lblLevel;
+    @FXML private Label lblMessage;
     @FXML private Label lblPlayerName;
+
+    /**
+     * Creates a Help Button to provide game information
+     */
+    @FXML
+    private void handleHelp(ActionEvent event) {
+        String helpText = """
+        📖 MiniDungeon Help
+
+        🎮 Objective:
+        - Explore the dungeon, collect gold and potions, and survive mutant attacks!
+        - Reach the ladder to advance to the next level.
+        - The game ends when your HP hits 0 or you run out of steps.
+
+        🎯 Controls:
+        - Use the movement buttons (Up, Down, Left, Right) to move.
+        - Save/Load your game at any time.
+        
+        🧪 Items:
+        - 💰 Gold: +2 points
+        - 🧪 Potion: +3 HP (up to max 10)
+        - 🧟 Melee Mutant: causes damage
+        - 🧙 Ranged Mutant: may damage from afar
+        - 🪜 Ladder: go to next level (difficulty +2)
+
+        🏆 Top Scores:
+        - Finishing the game with a high score may earn a Top 5 spot!
+
+        Good luck, adventurer!
+        """;
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game Help");
+        alert.setHeaderText("MiniDungeon Instructions");
+        alert.setContentText(helpText);
+        alert.getDialogPane().setPrefWidth(450);
+        alert.showAndWait();
+    }
 
     private GameEngine engine;
 
@@ -66,6 +106,7 @@ public class Controller {
             System.out.println("❗ Invalid difficulty, using default.");
         }
 
+
         String playerName = txtName.getText().isEmpty() ? "Unknown" : txtName.getText();
         System.out.println("✔ Player name: " + playerName);
 
@@ -89,6 +130,8 @@ public class Controller {
             System.err.println("❌ Error during GUI or stats update: " + e.getMessage());
             e.printStackTrace();
         }
+
+        lblMessage.setText("Game started. Explore carefully!");
     }
 
 
@@ -132,7 +175,7 @@ public class Controller {
         }
     }
 
-    private void processMove(String direction) {
+        private void processMove(String direction) {
         if (engine == null) return;
 
         try {
@@ -140,15 +183,15 @@ public class Controller {
             if (moved) {
                 GameCell cell = engine.getMap()[engine.getPlayer().getRow()][engine.getPlayer().getCol()];
                 if (cell != null) {
-                    System.out.println(cell.onEnter(engine.getPlayer()));
+                    String result = cell.onEnter(engine.getPlayer());
+                    showMessage(result);  // Display result in lblMessage
                 } else {
-                    System.out.println("⚠ Player moved into a null cell!");
+                    showMessage("Player moved into a mysterious void!");
                 }
             }
 
             updateGui();
             updateStats();
-
 
 
             // Ensure Level label updates with current level
@@ -218,4 +261,9 @@ public class Controller {
         );
         gridPane.setBackground(new Background(bg));
     }
+
+    private void showMessage(String message) {
+        lblMessage.setText(message);
+    }
+
 }

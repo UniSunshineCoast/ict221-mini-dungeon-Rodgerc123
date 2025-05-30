@@ -21,6 +21,8 @@
             <Label fx:id="lblHP" text="HP: 10"/>
             <Label fx:id="lblScore" text="Score: 0"/>
             <Label fx:id="lblSteps" text="Steps Left: 100"/>
+            <Label fx:id="lblMessage" layoutX="50" layoutY="700"
+                   prefWidth="500" wrapText="true" text="Message area"/>
         </HBox>
     </top>
 
@@ -45,6 +47,8 @@
                 <Button fx:id="btnRight" text="Right" onAction="#handleRight"/>
                 <Button fx:id="btnSave" text="Save" onAction="#handleSave"/>
                 <Button fx:id="btnLoad" text="Load" onAction="#handleLoad"/>
+                <Button fx:id="btnHelp" layoutX="500" layoutY="550"
+                        text="Help" onAction="#handleHelp"/>
             </HBox>
 
             <!-- Row 2: Player name -->
